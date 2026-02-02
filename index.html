@@ -172,6 +172,37 @@
     margin: 12px 0;
     border-left: 4px solid var(--accent);
   }
+
+  /* ✅ 결과 레이아웃: 텍스트 + 이미지 옆 배치 */
+  .result-layout{
+    display:grid;
+    grid-template-columns: 1fr 260px;
+    gap:16px;
+    align-items:start;
+  }
+  .result-media{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+  }
+  #resultImg{
+    width:100%;
+    max-width:240px;
+    height:auto;
+    border-radius:14px;
+    box-shadow: 0 8px 22px rgba(5,30,60,0.18);
+    background:#fff;
+    object-fit:cover;
+    display:none; /* 기본은 숨김 -> 매칭되면 표시 */
+  }
+  @media (max-width: 720px){
+    .result-layout{
+      grid-template-columns: 1fr;
+    }
+    #resultImg{
+      max-width: 320px;
+    }
+  }
 </style>
 </head>
 
@@ -261,11 +292,20 @@
 
       <!-- ================= RESULT ================= -->
       <div class="page" id="result">
-        <h1 id="resultTitle"></h1>
-        <p id="resultDesc"></p>
-        <div id="resultBody"></div>
-        <div id="resultActions"></div>
-        <div id="resultCaution"></div>
+        <!-- ✅ 텍스트 + 이미지 옆 배치 -->
+        <div class="result-layout">
+          <div class="result-text">
+            <h1 id="resultTitle"></h1>
+            <p id="resultDesc"></p>
+            <div id="resultBody"></div>
+            <div id="resultActions"></div>
+            <div id="resultCaution"></div>
+          </div>
+
+          <div class="result-media">
+            <img id="resultImg" alt="결과 동물 이미지" />
+          </div>
+        </div>
 
         <div class="actions">
           <button class="primary" onclick="restart()">다시 하기</button>
@@ -615,6 +655,32 @@ const results = {
   }
 };
 
+/* ================= 결과 이미지 매핑 ================= */
+/* 파일명:
+  ant.jpeg, bee.jpeg, dog.jpeg, dolphin.jpeg, elephant.jpeg,
+  fox.jpeg, mae.jpeg, micat.jpeg, octopus.jpeg, soodal.jpeg
+*/
+const animalImgMap = {
+  '수달': 'soodal.jpeg',
+  '개': 'dog.jpeg',
+  '코끼리': 'elephant.jpeg',
+  '벌': 'bee.jpeg',
+  '매': 'mae.jpeg',
+  '돌고래': 'dolphin.jpeg',
+  '문어': 'octopus.jpeg',
+  '미어캣': 'micat.jpeg',
+  '개미': 'ant.jpeg',
+  '여우': 'fox.jpeg'
+};
+
+function pickResultImageByTitle(title) {
+  // title 예: "🦦 즐거운 탐미가 수달"
+  for (const [k, file] of Object.entries(animalImgMap)) {
+    if (title.includes(k)) return {file, label: k};
+  }
+  return null;
+}
+
 /* ================= 공통 함수 ================= */
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -763,6 +829,10 @@ function showResult(a, b) {
 
   const result = results[key];
 
+  const imgEl = document.getElementById('resultImg');
+  imgEl.style.display = 'none';
+  imgEl.removeAttribute('src');
+
   if (result) {
     document.getElementById('resultTitle').textContent = result.title;
     document.getElementById('resultDesc').textContent = result.desc;
@@ -779,6 +849,14 @@ function showResult(a, b) {
       result.caution.map(x => '• ' + x).join('<br>') +
       '</div>';
     document.getElementById('resultCaution').innerHTML = cautionHtml;
+
+    // ✅ 제목에서 동물명을 찾아 이미지 매칭
+    const picked = pickResultImageByTitle(result.title);
+    if (picked) {
+      imgEl.src = picked.file;      // 같은 폴더에 있으므로 파일명만
+      imgEl.alt = `${picked.label} 이미지`;
+      imgEl.style.display = 'block';
+    }
   } else {
     document.getElementById('resultTitle').textContent = `${key} 유형`;
     document.getElementById('resultDesc').textContent = '행복 충전 패턴';
