@@ -181,31 +181,38 @@
 
   /* ✅ 결과 레이아웃: 텍스트 + 이미지 옆 배치 */
   .result-layout{
-    display:grid;
-    grid-template-columns: 1fr 260px;
+    display:flex;
     gap:16px;
-    align-items:stretch;
+  }
+  .result-text{
+    flex:1 1 0;
+    min-width:0;
   }
   .result-media{
+    flex:0 0 50%;
     display:flex;
     justify-content:center;
     align-items:center;
   }
   #resultImg{
-    width:auto;
-    max-width:240px;
     height:90%;
+    width:auto;
+    max-width:100%;
     border-radius:14px;
     background:#fff;
-    object-fit:cover;
+    object-fit:contain;
     display:none; /* 기본은 숨김 -> 매칭되면 표시 */
   }
   @media (max-width: 720px){
     .result-layout{
-      grid-template-columns: 1fr;
+      flex-direction: column;
+    }
+    .result-media{
+      flex:0 0 auto;
     }
     #resultImg{
-      max-width: 320px;
+      height:auto;
+      max-width:320px;
     }
   }
 </style>
