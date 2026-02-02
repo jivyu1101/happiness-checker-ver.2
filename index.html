@@ -193,27 +193,44 @@
     display:flex;
     justify-content:center;
     align-items:center;
+    overflow:hidden;
+    border-radius:14px;
   }
   #resultImg{
-    height:90%;
-    min-width:50%;
-    width:auto;
-    max-width:100%;
-    border-radius:14px;
-    background:#fff;
-    object-fit:contain;
+    width:100%;
+    aspect-ratio:1/1;
+    object-fit:cover;
     display:none; /* 기본은 숨김 -> 매칭되면 표시 */
   }
   @media (max-width: 720px){
+    .wrap{
+      padding:10px;
+    }
+    .app{
+      padding:10px;
+      margin-top:64px;
+    }
+    .panel{
+      padding:14px;
+    }
+    #result{
+      margin:-14px;
+      padding:14px;
+    }
+    .option label{
+      padding:6px 4px;
+    }
     .result-layout{
       flex-direction: column;
     }
     .result-media{
       flex:0 0 auto;
+      order:-1;
+      max-width:260px;
+      margin:0 auto 12px;
     }
     #resultImg{
-      height:auto;
-      max-width:320px;
+      width:100%;
     }
   }
 </style>
@@ -305,10 +322,9 @@
 
       <!-- ================= RESULT ================= -->
       <div class="page" id="result">
-        <!-- ✅ 텍스트 + 이미지 옆 배치 -->
+        <h1 id="resultTitle"></h1>
         <div class="result-layout">
           <div class="result-text">
-            <h1 id="resultTitle"></h1>
             <p id="resultDesc"></p>
             <div id="resultBody"></div>
             <div id="resultActions"></div>
