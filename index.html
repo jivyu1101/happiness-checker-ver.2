@@ -161,6 +161,12 @@
   .secondary:hover { background: #f8fbff; }
 
   /* 결과 */
+  #result {
+    background:#fff;
+    margin:-22px;
+    padding:22px;
+    border-radius:var(--round);
+  }
   #resultTitle { margin-top:0; color:#073b6b; }
   #resultDesc { margin-top:6px; margin-bottom:12px; }
   #resultBody { white-space:pre-line; line-height:1.5; color:#123; }
@@ -183,14 +189,13 @@
   .result-media{
     display:flex;
     justify-content:center;
-    align-items:flex-start;
+    align-items:center;
   }
   #resultImg{
     width:100%;
     max-width:240px;
     height:auto;
     border-radius:14px;
-    box-shadow: 0 8px 22px rgba(5,30,60,0.18);
     background:#fff;
     object-fit:cover;
     display:none; /* 기본은 숨김 -> 매칭되면 표시 */
