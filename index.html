@@ -291,8 +291,6 @@
         </div>
       </div>
 
-      <p class="lead">가장 최근에 한 행동/생각과 가까운 선지를 골라주세요:)</p>
-
       <!-- ================= SURVEY ================= -->
       <div class="page" id="survey">
         <h1>PERMA 설문</h1>
@@ -707,8 +705,10 @@ const animalImgMap = {
 
 function pickResultImageByTitle(title) {
   // title 예: "🦦 즐거운 탐미가 수달"
-  for (const [k, file] of Object.entries(animalImgMap)) {
-    if (title.includes(k)) return {file, label: k};
+  // 긴 문자열을 먼저 체크 (예: '개미'가 '개'보다 먼저 매칭되도록)
+  const sortedKeys = Object.keys(animalImgMap).sort((a, b) => b.length - a.length);
+  for (const k of sortedKeys) {
+    if (title.includes(k)) return {file: animalImgMap[k], label: k};
   }
   return null;
 }
